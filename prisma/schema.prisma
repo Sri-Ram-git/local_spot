@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Listing {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  category    String
+  price       Float
+  lat         Float
+  lng         Float
+  bookings    Booking[]
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  listingId Int
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  bookedAt  DateTime @default(now())
+}
