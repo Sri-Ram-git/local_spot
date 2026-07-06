@@ -40,9 +40,7 @@ export async function createBooking(listingId: number): Promise<Booking> {
 }
 
 export async function geocodeSearch(query: string): Promise<SearchResult[]> {
-  const res = await fetch(
-    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`
-  );
+  const res = await fetch(`${API_URL}/geocode?q=${encodeURIComponent(query)}`);
   if (!res.ok) throw new Error('Geocode failed');
   return res.json();
 }

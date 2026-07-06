@@ -39,7 +39,7 @@ const shimmerVariants = {
 };
 
 function Content() {
-  const { view, listings, selectListing, loading } = useApp();
+  const { view, listings, selectListing, loading, showCategories } = useApp();
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   const filteredListings = useMemo(
@@ -89,9 +89,9 @@ function Content() {
             exit="exit"
             className="h-full pt-16 relative"
           >
-            {/* Search bar below header */}
+            {/* Search bar — always visible */}
             <motion.div
-              className="absolute top-3 left-1/2 -translate-x-1/2 z-20"
+              className="fixed top-20 left-1/2 -translate-x-1/2 z-30"
               initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ type: 'spring', stiffness: 200, damping: 24, delay: 0.1 }}
@@ -99,32 +99,38 @@ function Content() {
               <MapSearch />
             </motion.div>
 
-            {/* Category pills */}
-            <motion.div
-              className="absolute top-14 left-1/2 -translate-x-1/2 z-20"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ type: 'spring', stiffness: 200, damping: 24, delay: 0.15 }}
-            >
-              <div className="flex gap-1.5 bg-white/70 backdrop-blur-xl rounded-xl px-2.5 py-1.5 shadow-md border border-white/40">
-                {CATEGORIES.map(cat => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-3.5 py-1 text-xs font-medium rounded-lg transition-all ${
-                      selectedCategory === cat
-                        ? 'bg-zinc-900 text-white shadow-sm'
-                        : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
+            {/* Category pills — only when toggled */}
+            <AnimatePresence>
+              {showCategories && (
+                <motion.div
+                  key="categories"
+                  initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                  className="fixed top-28 left-1/2 -translate-x-1/2 z-30"
+                >
+                  <div className="flex gap-1.5 bg-white/70 backdrop-blur-xl rounded-xl px-2.5 py-1.5 shadow-md border border-white/40">
+                    {CATEGORIES.map(cat => (
+                      <button
+                        key={cat}
+                        onClick={() => setSelectedCategory(cat)}
+                        className={`px-3.5 py-1 text-xs font-medium rounded-lg transition-all ${
+                          selectedCategory === cat
+                            ? 'bg-zinc-900 text-white shadow-sm'
+                            : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Floating card strip at bottom */}
-            <div className="absolute bottom-4 left-4 right-4 z-10">
+            <div className={`absolute bottom-4 left-4 right-4 z-10 ${showCategories ? 'mt-24' : ''}`}>
               <div className="max-w-3xl mx-auto">
                 <div className="flex gap-3 overflow-x-auto pb-2 px-1 snap-x snap-mandatory">
                   {loading

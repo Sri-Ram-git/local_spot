@@ -58,5 +58,20 @@ app.delete('/api/listings/:id', async (req, res) => {
   }
 });
 
+app.get('/api/geocode', async (req, res) => {
+  const { q } = req.query;
+  if (!q) return res.status(400).json({ error: 'Missing query' });
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=5`,
+      { headers: { 'User-Agent': 'LocalSpot/1.0' } }
+    );
+    const data = await response.json();
+    res.json(data);
+  } catch {
+    res.status(502).json({ error: 'Geocode failed' });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server sprinting on port ${PORT}`));

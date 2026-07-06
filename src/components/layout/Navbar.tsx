@@ -27,7 +27,7 @@ function useScrollDirection() {
 
 export default function Navbar() {
   const { direction, atTop } = useScrollDirection();
-  const { setView } = useApp();
+  const { setView, toggleCategories, showCategories } = useApp();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isHidden = direction === 'down' && !atTop && !mobileOpen;
@@ -60,7 +60,7 @@ export default function Navbar() {
               <button onClick={() => setView('browse')} className="px-4 py-1.5 text-sm font-medium text-zinc-900 bg-zinc-100 rounded-full">
                 Explore
               </button>
-              <button onClick={() => alert('Categories coming soon')} className="px-4 py-1.5 text-sm font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 rounded-full transition-colors">
+              <button onClick={toggleCategories} className={`px-4 py-1.5 text-sm font-medium rounded-full transition-colors ${showCategories ? 'text-white bg-zinc-900' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'}`}>
                 Categories
               </button>
               <Button variant="ghost" size="sm" onClick={() => setView('host')}>
@@ -118,7 +118,7 @@ export default function Navbar() {
                 <button onClick={() => { setView('browse'); setMobileOpen(false); }} className="w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-zinc-100">
                   Explore
                 </button>
-                <button onClick={() => { alert('Categories'); setMobileOpen(false); }} className="w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-zinc-100">
+                <button onClick={() => { toggleCategories(); setMobileOpen(false); }} className="w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-zinc-100">
                   Categories
                 </button>
                 <button onClick={() => { setView('host'); setMobileOpen(false); }} className="w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-zinc-100">

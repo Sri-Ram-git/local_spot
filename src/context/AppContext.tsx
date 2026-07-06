@@ -24,6 +24,8 @@ interface AppContextType extends AppState {
   handleDelete: (id: number) => Promise<void>;
   handleBook: (id: number) => Promise<void>;
   handleCreateListing: (data: Partial<Listing>) => Promise<void>;
+  showCategories: boolean;
+  toggleCategories: () => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -37,6 +39,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showCategories, setShowCategories] = useState(false);
+  const toggleCategories = useCallback(() => setShowCategories(prev => !prev), []);
 
   const refreshListings = useCallback(async () => {
     try {
@@ -84,6 +88,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setView, setMapCenter, setSelectedLocation, selectListing,
         setDrawerOpen, refreshListings, refreshBookings,
         handleDelete, handleBook, handleCreateListing,
+        showCategories, toggleCategories,
       }}
     >
       {children}
