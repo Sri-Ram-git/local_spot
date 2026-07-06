@@ -5,6 +5,14 @@ import 'leaflet/dist/leaflet.css';
 import { useApp } from '../../context/AppContext';
 import LocationPicker from './LocationPicker';
 
+// Fix Leaflet default icon paths for bundlers
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+});
+
 function createMarkerIcon(selected: boolean = false): L.DivIcon {
   return L.divIcon({
     className: '',
